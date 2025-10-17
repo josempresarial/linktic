@@ -1,0 +1,17 @@
+
+@startuml
+title Arquitectura General - LINKTIC Backend
+
+actor Cliente
+rectangle "products-service (8081)" as P {
+  [ProductController] --> [ProductRepository]
+  [ProductRepository] --> [H2 Database]
+}
+rectangle "inventory-service (8082)" as I {
+  [InventoryController] --> [InventoryRepository]
+  [InventoryRepository] --> [H2 Database]
+  [InventoryController] --> P : HTTP (GET /products/{id})
+}
+
+Cliente --> I : POST /inventory/purchase
+@enduml
