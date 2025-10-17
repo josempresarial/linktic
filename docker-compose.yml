@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  products:
+    build: ./products-service
+    container_name: products
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./products-service/data:/app/data
+
+  inventory:
+    build: ./inventory-service
+    container_name: inventory
+    ports:
+      - "8082:8082"
+    depends_on:
+      - products
+    environment:
+      - APP_PRODUCTS_URL=http://products:8081
+      - APP_PRODUCTS_API_KEY=products-secret-key
+      - APP_API_KEY=inventory-secret-key
+    volumes:
+      - ./inventory-service/data:/app/data
